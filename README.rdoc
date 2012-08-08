@@ -1,8 +1,13 @@
 = ActiveAdminAwesomeNestedSet
 
+
 = Purpose
 
-Add sortable columns for active admin.
+Add sortable columns for active admin. Show index page as a tree.
+
+= Contributors
+
+* BrandyMint [https://github.com/BrandyMint]
 
 = Features
 
