@@ -1,7 +1,21 @@
 module ActiveAdmin
   module AwesomeNestedSet
     module Helper
-      # Call this inside your index do...end bock to make your resource sortable.
+      # Call this inside your index do...end block to make a column indented
+      # for improved readability.
+      #
+      # Requires Awesome Nested Set 'depth' be included in the model
+      def sortable_tree_indented_column column_name
+        column :name do |resource|
+          if resource.respond_to?("depth")
+            "<span style=\"padding-left:#{resource.depth*24}px\">&bull; #{resource[column_name]}</span>".html_safe
+          else
+            resource[column_name]
+          end
+        end
+      end
+
+      # Call this inside your index do...end block to make your resource sortable.
       #
       # Example:
       #
