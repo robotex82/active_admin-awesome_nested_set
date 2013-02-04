@@ -20,7 +20,7 @@ module ActiveAdmin
       #    end
       #  end
       def sortable_tree_indented_column column_name
-        column :name do |resource|
+        column column_name do |resource|
           if resource.respond_to?("depth")
             "<span style=\"padding-left:#{resource.depth*24}px\">&bull; #{resource[column_name]}</span>".html_safe
           else
