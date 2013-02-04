@@ -62,7 +62,20 @@ You can add sortable columns, member actions and sorting like this:
       default_actions
     end
   end
-  
+
+If you are utilizing the 'depth' property on your model, you can provide hierarchical indentation like this:
+
+  #app/admin/category.rb
+  ActiveAdmin.register Category do
+    index do
+      #...
+      sortable_tree_indented_column :firstname
+      column :lastname
+      #...
+    end
+  end
+
+   
 = Todo
 
 * Tests, tests, tests.

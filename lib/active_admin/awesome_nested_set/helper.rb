@@ -1,10 +1,24 @@
 module ActiveAdmin
   module AwesomeNestedSet
-    module Helper
+    module Helper 
       # Call this inside your index do...end block to make a column indented
       # for improved readability.
       #
-      # Requires Awesome Nested Set 'depth' be included in the model
+      # Requires 'depth' be included in the resource
+      #
+      # Example:
+      #
+      # #app/admin/players.rb
+      #
+      #  ActiveAdmin.register Player do
+      #    index do
+      #      #...
+      #      # This indents the firstname column based upon the :depth property
+      #      sortable_tree_indented_column :firstname
+      #      column :lastname
+      #      #...
+      #    end
+      #  end
       def sortable_tree_indented_column column_name
         column :name do |resource|
           if resource.respond_to?("depth")
