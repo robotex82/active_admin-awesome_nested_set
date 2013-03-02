@@ -1,0 +1,1429 @@
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (0.1ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (16.9ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (5.8ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+Migrating to DeviseCreateAdminUsers (20130228120819)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "admin_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar(255) DEFAULT '' NOT NULL, "encrypted_password" varchar(255) DEFAULT '' NOT NULL, "reset_password_token" varchar(255), "reset_password_sent_at" datetime, "remember_created_at" datetime, "sign_in_count" integer DEFAULT 0, "current_sign_in_at" datetime, "last_sign_in_at" datetime, "current_sign_in_ip" varchar(255), "last_sign_in_ip" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.2ms)[0m  [1mCREATE UNIQUE INDEX "index_admin_users_on_email" ON "admin_users" ("email")[0m
+  [1m[35m (0.1ms)[0m  CREATE UNIQUE INDEX "index_admin_users_on_reset_password_token" ON "admin_users" ("reset_password_token")
+  [1m[36mAdminUser Exists (0.1ms)[0m  [1mSELECT 1 AS one FROM "admin_users" WHERE "admin_users"."email" = 'admin@example.com' LIMIT 1[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "admin_users" ("created_at", "current_sign_in_at", "current_sign_in_ip", "email", "encrypted_password", "last_sign_in_at", "last_sign_in_ip", "remember_created_at", "reset_password_sent_at", "reset_password_token", "sign_in_count", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)  [["created_at", Thu, 28 Feb 2013 12:15:46 UTC +00:00], ["current_sign_in_at", nil], ["current_sign_in_ip", nil], ["email", "admin@example.com"], ["encrypted_password", "$2a$10$s.n.Ex4K1v9fydWoqcs9eeuy5Mdxe/vORKZaF4V9yIs8AE8/Py.sa"], ["last_sign_in_at", nil], ["last_sign_in_ip", nil], ["remember_created_at", nil], ["reset_password_sent_at", nil], ["reset_password_token", nil], ["sign_in_count", 0], ["updated_at", Thu, 28 Feb 2013 12:15:46 UTC +00:00]]
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20130228120819')[0m
+  [1m[35m (3.8ms)[0m  commit transaction
+Migrating to CreateAdminNotes (20130228120821)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "admin_notes" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_id" varchar(255) NOT NULL, "resource_type" varchar(255) NOT NULL, "admin_user_id" integer, "admin_user_type" varchar(255), "body" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mCREATE INDEX "index_admin_notes_on_resource_type_and_resource_id" ON "admin_notes" ("resource_type", "resource_id")[0m
+  [1m[35m (0.1ms)[0m  CREATE INDEX "index_admin_notes_on_admin_user_type_and_admin_user_id" ON "admin_notes" ("admin_user_type", "admin_user_id")
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20130228120821')[0m
+  [1m[35m (3.2ms)[0m  commit transaction
+Migrating to MoveAdminNotesToComments (20130228120822)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  DROP INDEX "index_admin_notes_on_admin_user_type_and_admin_user_id"
+  [1m[36m (0.2ms)[0m  [1mALTER TABLE "admin_notes" RENAME TO "active_admin_comments"[0m
+  [1m[35m (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_active_admin_comments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_id" varchar(255) NOT NULL, "resource_type" varchar(255) NOT NULL, "admin_user_id" integer, "author_type" varchar(255), "body" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mCREATE INDEX "temp_index_admin_notes_on_resource_type_and_resource_id" ON "altered_active_admin_comments" ("resource_type", "resource_id")[0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "active_admin_comments"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "active_admin_comments"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "active_admin_comments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_id" varchar(255) NOT NULL, "resource_type" varchar(255) NOT NULL, "admin_user_id" integer, "author_type" varchar(255), "body" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mCREATE INDEX "index_admin_notes_on_resource_type_and_resource_id" ON "active_admin_comments" ("resource_type", "resource_id")[0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "altered_active_admin_comments"
+  [1m[36m (0.2ms)[0m  [1mDROP TABLE "altered_active_admin_comments"[0m
+  [1m[35m (0.1ms)[0m  CREATE TEMPORARY TABLE "altered_active_admin_comments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_id" varchar(255) NOT NULL, "resource_type" varchar(255) NOT NULL, "author_id" integer, "author_type" varchar(255), "body" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mCREATE INDEX "temp_index_admin_notes_on_resource_type_and_resource_id" ON "altered_active_admin_comments" ("resource_type", "resource_id")[0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "active_admin_comments"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "active_admin_comments"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "active_admin_comments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_id" varchar(255) NOT NULL, "resource_type" varchar(255) NOT NULL, "author_id" integer, "author_type" varchar(255), "body" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mCREATE INDEX "index_admin_notes_on_resource_type_and_resource_id" ON "active_admin_comments" ("resource_type", "resource_id")[0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "altered_active_admin_comments"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "altered_active_admin_comments"[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "active_admin_comments" ADD "namespace" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mCREATE INDEX "index_active_admin_comments_on_namespace" ON "active_admin_comments" ("namespace")[0m
+  [1m[35m (0.1ms)[0m  CREATE INDEX "index_active_admin_comments_on_author_type_and_author_id" ON "active_admin_comments" ("author_type", "author_id")
+  [1m[36m (0.0ms)[0m  [1mUPDATE active_admin_comments SET namespace='admin'[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20130228120822')
+  [1m[36m (4.7ms)[0m  [1mcommit transaction[0m
+Migrating to CreateCategories (20130228121407)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "categories" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "lft" integer, "rgt" integer, "parent_id" integer, "depth" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20130228121407')
+  [1m[36m (2.5ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+Connecting to database specified by database.yml
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (16.2ms)[0m  [1mCREATE TABLE "active_admin_comments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_id" varchar(255) NOT NULL, "resource_type" varchar(255) NOT NULL, "author_id" integer, "author_type" varchar(255), "body" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "namespace" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE INDEX "index_active_admin_comments_on_author_type_and_author_id" ON "active_admin_comments" ("author_type", "author_id")
+  [1m[36m (3.6ms)[0m  [1mCREATE INDEX "index_active_admin_comments_on_namespace" ON "active_admin_comments" ("namespace")[0m
+  [1m[35m (3.5ms)[0m  CREATE INDEX "index_admin_notes_on_resource_type_and_resource_id" ON "active_admin_comments" ("resource_type", "resource_id")
+  [1m[36m (3.0ms)[0m  [1mCREATE TABLE "admin_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar(255) DEFAULT '' NOT NULL, "encrypted_password" varchar(255) DEFAULT '' NOT NULL, "reset_password_token" varchar(255), "reset_password_sent_at" datetime, "remember_created_at" datetime, "sign_in_count" integer DEFAULT 0, "current_sign_in_at" datetime, "last_sign_in_at" datetime, "current_sign_in_ip" varchar(255), "last_sign_in_ip" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.1ms)[0m  CREATE UNIQUE INDEX "index_admin_users_on_email" ON "admin_users" ("email")
+  [1m[36m (4.2ms)[0m  [1mCREATE UNIQUE INDEX "index_admin_users_on_reset_password_token" ON "admin_users" ("reset_password_token")[0m
+  [1m[35m (3.0ms)[0m  CREATE TABLE "categories" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "lft" integer, "rgt" integer, "parent_id" integer, "depth" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.0ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [1m[35m (3.0ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36m (0.0ms)[0m  [1mSELECT version FROM "schema_migrations"[0m
+  [1m[35m (3.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20130228121407')
+  [1m[36m (3.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20130228120819')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20130228120822')
+  [1m[36m (3.0ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20130228120821')[0m
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+
+
+Started GET "/admin" for 192.168.0.36 at Thu Feb 28 13:35:35 +0100 2013
+Processing by Admin::DashboardController#index as HTML
+Completed 401 Unauthorized in 9ms
+
+
+Started GET "/admin/login" for 192.168.0.36 at Thu Feb 28 13:35:35 +0100 2013
+Processing by ActiveAdmin::Devise::SessionsController#new as HTML
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/devise/shared/_links.erb (1.0ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/devise/sessions/new.html.erb within layouts/active_admin_logged_out (75.9ms)
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section-header'
+         from line 16 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_forms.css.scss
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 24 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `default-button'
+         from line 65 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `dark-button'
+         from line 181 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_forms.css.scss
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 35 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `default-button'
+         from line 65 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `dark-button'
+         from line 181 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_forms.css.scss
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 44 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 197 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_forms.css.scss
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 56 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 197 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_forms.css.scss
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 44 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 279 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_forms.css.scss
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 56 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 279 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_forms.css.scss
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_popovers.css.scss
+         from line 15 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 62 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_popovers.css.scss
+         from line 15 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section-header'
+         from line 18 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_tables.css.scss
+         from line 16 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 44 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 5 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_dropdown_menu.scss
+         from line 20 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 56 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 5 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_dropdown_menu.scss
+         from line 20 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 83 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_dropdown_menu.scss
+         from line 20 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 96 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_dropdown_menu.scss
+         from line 20 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 24 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `default-button'
+         from line 65 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `dark-button'
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_buttons.scss
+         from line 21 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 35 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `default-button'
+         from line 65 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `dark-button'
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_buttons.scss
+         from line 21 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 44 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_pagination.scss
+         from line 24 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 56 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 11 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_pagination.scss
+         from line 24 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 24 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `default-button'
+         from line 15 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_pagination.scss
+         from line 24 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 35 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `default-button'
+         from line 15 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_pagination.scss
+         from line 24 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section-header'
+         from line 28 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section'
+         from line 2 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_panels.scss
+         from line 25 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section-header'
+         from line 28 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_panels.scss
+         from line 25 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 44 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 25 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_table_tools.css.scss
+         from line 29 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 56 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 25 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_table_tools.css.scss
+         from line 29 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 41 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_table_tools.css.scss
+         from line 29 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 84 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/components/_table_tools.css.scss
+         from line 29 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section-header'
+         from line 28 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section'
+         from line 4 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/pages/_dashboard.scss
+         from line 30 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section-header'
+         from line 15 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/pages/_logged_out.scss
+         from line 31 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 18 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/pages/_logged_out.scss
+         from line 31 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 6 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_sections.css.scss, in `section-header'
+         from line 2 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/structure/_title_bar.scss
+         from line 34 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 5 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/structure/_title_bar.scss
+         from line 34 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 44 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 34 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/structure/_title_bar.scss
+         from line 34 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+WARNING: box-shadow is deprecated and will be removed in the next major version release
+         on line 7 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/bourbon-3.1.1/app/assets/stylesheets/_bourbon-deprecated-upcoming.scss, in `box-shadow'
+         from line 56 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/mixins/_buttons.css.scss, in `light-button'
+         from line 34 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/structure/_title_bar.scss
+         from line 34 of /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/stylesheets/active_admin/_base.css.scss
+         from line 12 of /home/robo/rails/modules/active_admin-awesome_nested_set/spec/dummy/app/assets/stylesheets/active_admin.css.scss
+
+Compiled active_admin.css  (3144ms)  (pid 20836)
+Compiled active_admin/print.css  (250ms)  (pid 20836)
+Compiled jquery.js  (4ms)  (pid 20836)
+Compiled jquery-ui.js  (47ms)  (pid 20836)
+Compiled jquery_ujs.js  (0ms)  (pid 20836)
+Completed 500 Internal Server Error in 3612ms
+
+ActionView::Template::Error (no such file to load -- coffee_script
+  (in /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/assets/javascripts/active_admin/lib/namespace.js.coffee)):
+    9:     <%= stylesheet_link_tag style.path, style.options.dup %>
+    10:   <% end %>
+    11:   <% ActiveAdmin.application.javascripts.each do |path| %>
+    12:     <%= javascript_include_tag path %>
+    13:   <% end %>
+    14: 
+    15:   <%= csrf_meta_tag %>
+  activesupport (3.2.12) lib/active_support/dependencies.rb:251:in `require'
+  activesupport (3.2.12) lib/active_support/dependencies.rb:251:in `require'
+  activesupport (3.2.12) lib/active_support/dependencies.rb:236:in `load_dependency'
+  activesupport (3.2.12) lib/active_support/dependencies.rb:251:in `require'
+  tilt (1.3.3) lib/tilt/template.rb:108:in `require_template_library'
+  tilt (1.3.3) lib/tilt/coffee.rb:36:in `initialize_engine'
+  tilt (1.3.3) lib/tilt/template.rb:55:in `initialize'
+  sprockets (2.2.2) lib/sprockets/context.rb:192:in `new'
+  sprockets (2.2.2) lib/sprockets/context.rb:192:in `evaluate'
+  sprockets (2.2.2) lib/sprockets/context.rb:190:in `each'
+  sprockets (2.2.2) lib/sprockets/context.rb:190:in `evaluate'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:12:in `initialize'
+  sprockets (2.2.2) lib/sprockets/base.rb:249:in `new'
+  sprockets (2.2.2) lib/sprockets/base.rb:249:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:270:in `circular_call_protection'
+  sprockets (2.2.2) lib/sprockets/base.rb:248:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:93:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/caching.rb:19:in `cache_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:92:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:169:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:60:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:111:in `resolve_dependencies'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:105:in `each'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:105:in `resolve_dependencies'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:97:in `build_required_assets'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:16:in `initialize'
+  sprockets (2.2.2) lib/sprockets/base.rb:249:in `new'
+  sprockets (2.2.2) lib/sprockets/base.rb:249:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:270:in `circular_call_protection'
+  sprockets (2.2.2) lib/sprockets/base.rb:248:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:93:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/caching.rb:19:in `cache_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:92:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:169:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:60:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:111:in `resolve_dependencies'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:105:in `each'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:105:in `resolve_dependencies'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:97:in `build_required_assets'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:16:in `initialize'
+  sprockets (2.2.2) lib/sprockets/base.rb:249:in `new'
+  sprockets (2.2.2) lib/sprockets/base.rb:249:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:270:in `circular_call_protection'
+  sprockets (2.2.2) lib/sprockets/base.rb:248:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:93:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/caching.rb:19:in `cache_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:92:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:169:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:60:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:111:in `resolve_dependencies'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:105:in `each'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:105:in `resolve_dependencies'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:97:in `build_required_assets'
+  sprockets (2.2.2) lib/sprockets/processed_asset.rb:16:in `initialize'
+  sprockets (2.2.2) lib/sprockets/base.rb:249:in `new'
+  sprockets (2.2.2) lib/sprockets/base.rb:249:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:270:in `circular_call_protection'
+  sprockets (2.2.2) lib/sprockets/base.rb:248:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:93:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/caching.rb:19:in `cache_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:92:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:169:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:60:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/bundled_asset.rb:16:in `initialize'
+  sprockets (2.2.2) lib/sprockets/base.rb:252:in `new'
+  sprockets (2.2.2) lib/sprockets/base.rb:252:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:93:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/caching.rb:19:in `cache_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:92:in `build_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:169:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/index.rb:60:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/environment.rb:78:in `find_asset'
+  sprockets (2.2.2) lib/sprockets/base.rb:177:in `[]'
+  actionpack (3.2.12) lib/sprockets/helpers/rails_helper.rb:126:in `asset_for'
+  actionpack (3.2.12) lib/sprockets/helpers/rails_helper.rb:27:in `javascript_include_tag'
+  actionpack (3.2.12) lib/sprockets/helpers/rails_helper.rb:26:in `collect'
+  actionpack (3.2.12) lib/sprockets/helpers/rails_helper.rb:26:in `javascript_include_tag'
+  activeadmin (0.5.1) app/views/layouts/active_admin_logged_out.html.erb:12:in `__home_robo__rvm_gems_ruby_______p____active_admin_awesome_nested_set_gems_activeadmin_______app_views_layouts_active_admin_logged_out_html_erb___417468089__615489478'
+  activeadmin (0.5.1) app/views/layouts/active_admin_logged_out.html.erb:11:in `each'
+  activeadmin (0.5.1) app/views/layouts/active_admin_logged_out.html.erb:11:in `__home_robo__rvm_gems_ruby_______p____active_admin_awesome_nested_set_gems_activeadmin_______app_views_layouts_active_admin_logged_out_html_erb___417468089__615489478'
+  actionpack (3.2.12) lib/action_view/template.rb:145:in `send'
+  actionpack (3.2.12) lib/action_view/template.rb:145:in `render'
+  activesupport (3.2.12) lib/active_support/notifications.rb:125:in `instrument'
+  actionpack (3.2.12) lib/action_view/template.rb:143:in `render'
+  actionpack (3.2.12) lib/action_view/renderer/template_renderer.rb:59:in `render_with_layout'
+  actionpack (3.2.12) lib/action_view/renderer/template_renderer.rb:45:in `render_template'
+  actionpack (3.2.12) lib/action_view/renderer/template_renderer.rb:18:in `render'
+  actionpack (3.2.12) lib/action_view/renderer/renderer.rb:36:in `render_template'
+  actionpack (3.2.12) lib/action_view/renderer/renderer.rb:17:in `render'
+  actionpack (3.2.12) lib/abstract_controller/rendering.rb:110:in `_render_template'
+  actionpack (3.2.12) lib/action_controller/metal/streaming.rb:225:in `_render_template'
+  actionpack (3.2.12) lib/abstract_controller/rendering.rb:103:in `render_to_body'
+  actionpack (3.2.12) lib/action_controller/metal/renderers.rb:28:in `render_to_body'
+  actionpack (3.2.12) lib/action_controller/metal/compatibility.rb:50:in `render_to_body'
+  actionpack (3.2.12) lib/abstract_controller/rendering.rb:88:in `render'
+  actionpack (3.2.12) lib/action_controller/metal/rendering.rb:16:in `render'
+  actionpack (3.2.12) lib/action_controller/metal/instrumentation.rb:40:in `render'
+  activesupport (3.2.12) lib/active_support/core_ext/benchmark.rb:5:in `ms'
+  /home/robo/.rvm/rubies/ruby-1.8.7-p330/lib/ruby/1.8/benchmark.rb:308:in `realtime'
+  activesupport (3.2.12) lib/active_support/core_ext/benchmark.rb:5:in `ms'
+  actionpack (3.2.12) lib/action_controller/metal/instrumentation.rb:40:in `render'
+  actionpack (3.2.12) lib/action_controller/metal/instrumentation.rb:83:in `cleanup_view_runtime'
+  activerecord (3.2.12) lib/active_record/railties/controller_runtime.rb:24:in `cleanup_view_runtime'
+  actionpack (3.2.12) lib/action_controller/metal/instrumentation.rb:39:in `render'
+  actionpack (3.2.12) lib/action_controller/metal/implicit_render.rb:10:in `default_render'
+  actionpack (3.2.12) lib/action_controller/metal/responder.rb:232:in `default_render'
+  actionpack (3.2.12) lib/action_controller/metal/responder.rb:160:in `to_html'
+  actionpack (3.2.12) lib/action_controller/metal/responder.rb:153:in `send'
+  actionpack (3.2.12) lib/action_controller/metal/responder.rb:153:in `respond'
+  actionpack (3.2.12) lib/action_controller/metal/responder.rb:146:in `call'
+  actionpack (3.2.12) lib/action_controller/metal/mime_responds.rb:239:in `respond_with'
+  devise (2.2.3) app/controllers/devise/sessions_controller.rb:10:in `new'
+  actionpack (3.2.12) lib/action_controller/metal/implicit_render.rb:4:in `send_action'
+  actionpack (3.2.12) lib/action_controller/metal/implicit_render.rb:4:in `send_action'
+  actionpack (3.2.12) lib/abstract_controller/base.rb:167:in `process_action'
+  actionpack (3.2.12) lib/action_controller/metal/rendering.rb:10:in `process_action'
+  actionpack (3.2.12) lib/abstract_controller/callbacks.rb:18:in `process_action'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:447:in `_run__813430423__process_action__943997142__callbacks'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:405:in `send'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:405:in `__run_callback'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:385:in `_run_process_action_callbacks'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:81:in `send'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (3.2.12) lib/abstract_controller/callbacks.rb:17:in `process_action'
+  actionpack (3.2.12) lib/action_controller/metal/rescue.rb:29:in `process_action'
+  actionpack (3.2.12) lib/action_controller/metal/instrumentation.rb:30:in `process_action'
+  activesupport (3.2.12) lib/active_support/notifications.rb:123:in `instrument'
+  activesupport (3.2.12) lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+  activesupport (3.2.12) lib/active_support/notifications.rb:123:in `instrument'
+  actionpack (3.2.12) lib/action_controller/metal/instrumentation.rb:29:in `process_action'
+  actionpack (3.2.12) lib/action_controller/metal/params_wrapper.rb:207:in `process_action'
+  activerecord (3.2.12) lib/active_record/railties/controller_runtime.rb:18:in `process_action'
+  actionpack (3.2.12) lib/abstract_controller/base.rb:121:in `process'
+  actionpack (3.2.12) lib/abstract_controller/rendering.rb:45:in `process'
+  actionpack (3.2.12) lib/action_controller/metal.rb:203:in `dispatch'
+  actionpack (3.2.12) lib/action_controller/metal/rack_delegation.rb:14:in `dispatch'
+  actionpack (3.2.12) lib/action_controller/metal.rb:246:in `action'
+  actionpack (3.2.12) lib/action_dispatch/routing/route_set.rb:73:in `call'
+  actionpack (3.2.12) lib/action_dispatch/routing/route_set.rb:73:in `dispatch'
+  actionpack (3.2.12) lib/action_dispatch/routing/route_set.rb:36:in `call'
+  actionpack (3.2.12) lib/action_dispatch/routing/mapper.rb:42:in `call'
+  journey (1.0.4) lib/journey/router.rb:68:in `call'
+  journey (1.0.4) lib/journey/router.rb:56:in `each'
+  journey (1.0.4) lib/journey/router.rb:56:in `call'
+  actionpack (3.2.12) lib/action_dispatch/routing/route_set.rb:601:in `call'
+  warden (1.2.1) lib/warden/manager.rb:35:in `call'
+  warden (1.2.1) lib/warden/manager.rb:34:in `catch'
+  warden (1.2.1) lib/warden/manager.rb:34:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/best_standards_support.rb:17:in `call'
+  rack (1.4.5) lib/rack/etag.rb:23:in `call'
+  rack (1.4.5) lib/rack/conditionalget.rb:25:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/head.rb:14:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/params_parser.rb:21:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/flash.rb:242:in `call'
+  rack (1.4.5) lib/rack/session/abstract/id.rb:210:in `context'
+  rack (1.4.5) lib/rack/session/abstract/id.rb:205:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/cookies.rb:341:in `call'
+  activerecord (3.2.12) lib/active_record/query_cache.rb:64:in `call'
+  activerecord (3.2.12) lib/active_record/connection_adapters/abstract/connection_pool.rb:479:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/callbacks.rb:28:in `call'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:405:in `_run__397314981__call__4__callbacks'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:405:in `send'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:405:in `__run_callback'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:385:in `_run_call_callbacks'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:81:in `send'
+  activesupport (3.2.12) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (3.2.12) lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/reloader.rb:65:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/remote_ip.rb:31:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/debug_exceptions.rb:16:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.12) lib/rails/rack/logger.rb:32:in `call_app'
+  railties (3.2.12) lib/rails/rack/logger.rb:16:in `call'
+  activesupport (3.2.12) lib/active_support/tagged_logging.rb:22:in `tagged'
+  railties (3.2.12) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.5) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.5) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.12) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.5) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.12) lib/action_dispatch/middleware/static.rb:62:in `call'
+  railties (3.2.12) lib/rails/engine.rb:479:in `call'
+  railties (3.2.12) lib/rails/application.rb:223:in `call'
+  rack (1.4.5) lib/rack/content_length.rb:14:in `call'
+  railties (3.2.12) lib/rails/rack/log_tailer.rb:17:in `call'
+  thin (1.5.0) lib/thin/connection.rb:81:in `pre_process'
+  thin (1.5.0) lib/thin/connection.rb:79:in `catch'
+  thin (1.5.0) lib/thin/connection.rb:79:in `pre_process'
+  thin (1.5.0) lib/thin/connection.rb:54:in `process'
+  thin (1.5.0) lib/thin/connection.rb:39:in `receive_data'
+  eventmachine (1.0.1) lib/eventmachine.rb:187:in `run_machine'
+  eventmachine (1.0.1) lib/eventmachine.rb:187:in `run'
+  thin (1.5.0) lib/thin/backends/base.rb:63:in `start'
+  thin (1.5.0) lib/thin/server.rb:159:in `start'
+  rack (1.4.5) lib/rack/handler/thin.rb:13:in `run'
+  rack (1.4.5) lib/rack/server.rb:268:in `start'
+  railties (3.2.12) lib/rails/commands/server.rb:70:in `start'
+  railties (3.2.12) lib/rails/commands.rb:55
+  railties (3.2.12) lib/rails/commands.rb:50:in `tap'
+  railties (3.2.12) lib/rails/commands.rb:50
+  script/rails:6:in `require'
+  script/rails:6
+
+
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/_trace.erb (43.4ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.7ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (48.0ms)
+Connecting to database specified by database.yml
+
+
+Started GET "/admin/login" for 192.168.0.36 at Thu Feb 28 13:36:49 +0100 2013
+Processing by ActiveAdmin::Devise::SessionsController#new as HTML
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/devise/shared/_links.erb (0.9ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/devise/sessions/new.html.erb within layouts/active_admin_logged_out (42.5ms)
+Compiled active_admin/lib/namespace.js  (104ms)  (pid 20991)
+Compiled active_admin/components/jquery.aa.checkbox-toggler.js  (92ms)  (pid 20991)
+Compiled active_admin/components/jquery.aa.dropdown-menu.js  (131ms)  (pid 20991)
+Compiled active_admin/components/jquery.aa.popover.js  (90ms)  (pid 20991)
+Compiled active_admin/components/jquery.aa.table-checkbox-toggler.js  (85ms)  (pid 20991)
+Compiled active_admin/pages/application.js  (81ms)  (pid 20991)
+Compiled active_admin/pages/batch_actions.js  (83ms)  (pid 20991)
+Compiled active_admin/application.js  (717ms)  (pid 20991)
+Compiled active_admin/base.js  (774ms)  (pid 20991)
+Compiled active_admin.js  (780ms)  (pid 20991)
+Completed 200 OK in 1018ms (Views: 973.0ms | ActiveRecord: 0.1ms)
+
+
+Started GET "/assets/jquery-ui.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /jquery-ui.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /jquery_ujs.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin.css - 200 OK (11ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/print.css - 200 OK (2ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /jquery.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/active_admin/lib/namespace.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/lib/namespace.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/active_admin/components/jquery.aa.checkbox-toggler.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/components/jquery.aa.checkbox-toggler.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/active_admin/components/jquery.aa.dropdown-menu.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/components/jquery.aa.dropdown-menu.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/active_admin/pages/application.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/pages/application.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/active_admin/base.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/base.js - 304 Not Modified (15ms)
+
+
+Started GET "/assets/active_admin/components/jquery.aa.popover.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/components/jquery.aa.popover.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/active_admin/components/jquery.aa.table-checkbox-toggler.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/components/jquery.aa.table-checkbox-toggler.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/active_admin/pages/batch_actions.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/pages/batch_actions.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/active_admin/application.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin/application.js - 304 Not Modified (8ms)
+
+
+Started GET "/assets/active_admin.js?body=1" for 192.168.0.36 at Thu Feb 28 13:36:50 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (16ms)
+
+
+Started POST "/admin/login" for 192.168.0.36 at Thu Feb 28 13:36:53 +0100 2013
+Processing by ActiveAdmin::Devise::SessionsController#create as HTML
+  Parameters: {"commit"=>"Login", "authenticity_token"=>"jp8ejxDVqIm2mXarA4xfGeaj2qW34/LMpyy72iYUeKk=", "utf8"=>"✓", "admin_user"=>{"remember_me"=>"0", "password"=>"[FILTERED]", "email"=>"admin@example.com"}}
+  [1m[36mAdminUser Load (0.2ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."email" = 'admin@example.com' LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mUPDATE "admin_users" SET "current_sign_in_at" = '2013-02-28 12:36:53.428703', "last_sign_in_ip" = '192.168.0.36', "current_sign_in_ip" = '192.168.0.36', "sign_in_count" = 1, "updated_at" = '2013-02-28 12:36:53.430445', "last_sign_in_at" = '2013-02-28 12:36:53.428703' WHERE "admin_users"."id" = 1[0m
+  [1m[35m (18.6ms)[0m  commit transaction
+Redirected to http://dev.ecm:3000/admin
+Completed 302 Found in 105ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/admin" for 192.168.0.36 at Thu Feb 28 13:36:53 +0100 2013
+Processing by Admin::DashboardController#index as HTML
+  [1m[36mAdminUser Load (0.1ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/page/index.html.arb (57.4ms)
+Completed 200 OK in 61ms (Views: 59.1ms | ActiveRecord: 0.1ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:36:53 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (5ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:36:53 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:36:53 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:38:27 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.3ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" 
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (138.7ms)
+Completed 200 OK in 153ms (Views: 142.0ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:38:27 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:27 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:27 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:38:27 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (3ms)
+
+
+Started GET "/admin/categories/new" for 192.168.0.36 at Thu Feb 28 13:38:28 +0100 2013
+Processing by Admin::CategoriesController#new as HTML
+  [1m[36mAdminUser Load (0.4ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" 
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/new.html.arb (36.2ms)
+Completed 200 OK in 54ms (Views: 39.9ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:29 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:29 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:38:29 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started POST "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:38:37 +0100 2013
+Processing by Admin::CategoriesController#create as HTML
+  Parameters: {"commit"=>"Create Category", "category"=>{"name"=>"Parent", "parent_id"=>""}, "authenticity_token"=>"jp8ejxDVqIm2mXarA4xfGeaj2qW34/LMpyy72iYUeKk=", "utf8"=>"✓"}
+  [1m[36mAdminUser Load (0.2ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY "categories"."rgt" desc LIMIT 1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "categories" ("created_at", "depth", "lft", "name", "parent_id", "rgt", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)  [["created_at", Thu, 28 Feb 2013 12:38:37 UTC +00:00], ["depth", nil], ["lft", 1], ["name", "Parent"], ["parent_id", nil], ["rgt", 2], ["updated_at", Thu, 28 Feb 2013 12:38:37 UTC +00:00]]
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mSQL (0.1ms)[0m  UPDATE "categories" SET "depth" = 0 WHERE "categories"."id" IN (SELECT "categories"."id" FROM "categories" WHERE "categories"."id" = 1 ORDER BY "categories"."lft")
+  [1m[36m (5.1ms)[0m  [1mcommit transaction[0m
+Redirected to http://dev.ecm:3000/admin/categories/1
+Completed 302 Found in 64ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/admin/categories/1" for 192.168.0.36 at Thu Feb 28 13:38:37 +0100 2013
+Processing by Admin::CategoriesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mAdminUser Load (0.2ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", "1"]]
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "active_admin_comments" WHERE "active_admin_comments"."namespace" = 'admin' AND "active_admin_comments"."resource_id" = '1' AND "active_admin_comments"."resource_type" = 'Category'
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(*) FROM "active_admin_comments" WHERE "active_admin_comments"."namespace" = 'admin' AND "active_admin_comments"."resource_id" = '1' AND "active_admin_comments"."resource_type" = 'Category'[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/show.html.arb (37.3ms)
+Completed 200 OK in 42ms (Views: 38.7ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:37 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:37 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:38:37 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories/1/edit" for 192.168.0.36 at Thu Feb 28 13:38:40 +0100 2013
+Processing by Admin::CategoriesController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mAdminUser Load (0.3ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", "1"]]
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" [0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/edit.html.arb (93.9ms)
+Completed 200 OK in 104ms (Views: 97.4ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:40 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:40 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:38:40 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:38:45 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.3ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."id" desc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" [0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (141.4ms)
+Completed 200 OK in 147ms (Views: 143.3ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:38:45 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:45 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:45 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Thu Feb 28 13:38:46 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (4ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:38:46 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories/new" for 192.168.0.36 at Thu Feb 28 13:38:46 +0100 2013
+Processing by Admin::CategoriesController#new as HTML
+  [1m[35mAdminUser Load (0.3ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36mCategory Load (5.8ms)[0m  [1mSELECT "categories".* FROM "categories" [0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/new.html.arb (82.2ms)
+Completed 200 OK in 88ms (Views: 79.8ms | ActiveRecord: 6.1ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:46 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:46 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:38:46 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started POST "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:38:56 +0100 2013
+Processing by Admin::CategoriesController#create as HTML
+  Parameters: {"commit"=>"Create Category", "category"=>{"name"=>"Child", "parent_id"=>"1"}, "authenticity_token"=>"jp8ejxDVqIm2mXarA4xfGeaj2qW34/LMpyy72iYUeKk=", "utf8"=>"✓"}
+  [1m[35mAdminUser Load (0.2ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."rgt" desc LIMIT 1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "categories" ("created_at", "depth", "lft", "name", "parent_id", "rgt", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["created_at", Thu, 28 Feb 2013 12:38:56 UTC +00:00], ["depth", nil], ["lft", 3], ["name", "Child"], ["parent_id", 1], ["rgt", 4], ["updated_at", Thu, 28 Feb 2013 12:38:56 UTC +00:00]]
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = ? ORDER BY "categories"."lft" LIMIT 1  [["id", 1]]
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories"."lft", "categories"."rgt", "categories"."parent_id" FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", 2]]
+  [1m[35mSQL (0.3ms)[0m  UPDATE "categories" SET "lft" = CASE WHEN "lft" BETWEEN 2 AND 2 THEN "lft" + 4 - 2 WHEN "lft" BETWEEN 3 AND 4 THEN "lft" + 2 - 3 ELSE "lft" END, "rgt" = CASE WHEN "rgt" BETWEEN 2 AND 2 THEN "rgt" + 4 - 2 WHEN "rgt" BETWEEN 3 AND 4 THEN "rgt" + 2 - 3 ELSE "rgt" END, "parent_id" = CASE WHEN id = 2 THEN 1 ELSE "parent_id" END WHERE "categories"."id" IN (SELECT "categories"."id" FROM "categories" WHERE (not ("lft" = CASE WHEN "lft" BETWEEN 2 AND 2 THEN "lft" + 4 - 2 WHEN "lft" BETWEEN 3 AND 4 THEN "lft" + 2 - 3 ELSE "lft" END AND "rgt" = CASE WHEN "rgt" BETWEEN 2 AND 2 THEN "rgt" + 4 - 2 WHEN "rgt" BETWEEN 3 AND 4 THEN "rgt" + 2 - 3 ELSE "rgt" END AND "parent_id" = CASE WHEN id = 2 THEN 1 ELSE "parent_id" END)) ORDER BY "categories"."lft")
+  [1m[36mCategory Load (0.0ms)[0m  [1mSELECT "categories"."lft", "categories"."rgt", "categories"."parent_id" FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mCategory Load (0.0ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1  [["id", 2]]
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 2 AND "categories"."rgt" >= 3) AND ("categories".id != 2)[0m
+  [1m[35mSQL (0.1ms)[0m  UPDATE "categories" SET "depth" = 1 WHERE "categories"."id" IN (SELECT "categories"."id" FROM "categories" WHERE "categories"."id" = 2 ORDER BY "categories"."lft")
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 2 AND "categories"."rgt" >= 3) AND ("categories".id != 2)[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE ("categories"."lft" >= 2 AND "categories"."lft" < 3) AND ("categories".id != 2) ORDER BY "categories"."lft"
+  [1m[36mCategory Load (0.0ms)[0m  [1mSELECT "categories"."lft", "categories"."rgt", "categories"."parent_id" FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", 2]]
+  [1m[35mCategory Load (0.0ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1  [["id", 2]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 2 AND "categories"."rgt" >= 3) AND ("categories".id != 2)[0m
+  [1m[35mSQL (0.1ms)[0m  UPDATE "categories" SET "depth" = 1 WHERE "categories"."id" IN (SELECT "categories"."id" FROM "categories" WHERE "categories"."id" = 2 ORDER BY "categories"."lft")
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 2 AND "categories"."rgt" >= 3) AND ("categories".id != 2)[0m
+  [1m[35m (4.8ms)[0m  commit transaction
+Redirected to http://dev.ecm:3000/admin/categories/2
+Completed 302 Found in 32ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/admin/categories/2" for 192.168.0.36 at Thu Feb 28 13:38:56 +0100 2013
+Processing by Admin::CategoriesController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mAdminUser Load (0.2ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1  [["id", "2"]]
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = 1 LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "active_admin_comments" WHERE "active_admin_comments"."namespace" = 'admin' AND "active_admin_comments"."resource_id" = '2' AND "active_admin_comments"."resource_type" = 'Category'
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(*) FROM "active_admin_comments" WHERE "active_admin_comments"."namespace" = 'admin' AND "active_admin_comments"."resource_id" = '2' AND "active_admin_comments"."resource_type" = 'Category'[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/show.html.arb (38.4ms)
+Completed 200 OK in 43ms (Views: 40.4ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:57 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:38:57 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:38:57 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:44:29 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.3ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."id" desc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.2ms)[0m  [1mSELECT "categories".* FROM "categories" [0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (141.3ms)
+Completed 200 OK in 150ms (Views: 144.4ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:44:29 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:44:29 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:44:29 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Thu Feb 28 13:44:29 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:44:29 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:44:54 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.1ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."id" desc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY lft ASC[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (212.9ms)
+Completed 200 OK in 231ms (Views: 213.9ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:44:54 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:44:54 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:44:54 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Thu Feb 28 13:44:54 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:44:54 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:45:16 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.1ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.2ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY lft ASC[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (196.5ms)
+Completed 200 OK in 214ms (Views: 197.6ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:45:16 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:45:16 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:45:16 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Thu Feb 28 13:45:16 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:45:16 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:45:20 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.3ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.2ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY lft ASC[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (207.8ms)
+Completed 200 OK in 215ms (Views: 210.6ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:45:20 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:45:20 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:45:20 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Thu Feb 28 13:45:20 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:45:20 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:45:59 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.1ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.2ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" < 1) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" < 2) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" > 1) ORDER BY "categories"."lft" LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" > 2) ORDER BY "categories"."lft" LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY lft ASC[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (139.3ms)
+Completed 200 OK in 159ms (Views: 140.1ms | ActiveRecord: 1.4ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:45:59 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:45:59 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:45:59 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Thu Feb 28 13:45:59 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:45:59 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories/new" for 192.168.0.36 at Thu Feb 28 13:46:17 +0100 2013
+Processing by Admin::CategoriesController#new as HTML
+  [1m[35mAdminUser Load (0.3ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36mCategory Load (0.2ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY lft ASC[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/new.html.arb (33.1ms)
+Completed 200 OK in 95ms (Views: 88.9ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:17 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:17 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:46:17 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories/2/edit" for 192.168.0.36 at Thu Feb 28 13:46:24 +0100 2013
+Processing by Admin::CategoriesController#edit as HTML
+  Parameters: {"id"=>"2"}
+  [1m[35mAdminUser Load (0.2ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36mCategory Load (0.2ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? ORDER BY lft ASC LIMIT 1[0m  [["id", "2"]]
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = ? ORDER BY lft ASC LIMIT 1  [["id", 2]]
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY lft ASC[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = 1 ORDER BY lft ASC LIMIT 1
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/edit.html.arb (33.3ms)
+Completed 200 OK in 39ms (Views: 34.9ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:25 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:25 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:46:25 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started PUT "/admin/categories/2" for 192.168.0.36 at Thu Feb 28 13:46:30 +0100 2013
+Processing by Admin::CategoriesController#update as HTML
+  Parameters: {"commit"=>"Update Category", "category"=>{"name"=>"Child #1", "parent_id"=>"1"}, "authenticity_token"=>"jp8ejxDVqIm2mXarA4xfGeaj2qW34/LMpyy72iYUeKk=", "utf8"=>"✓", "id"=>"2"}
+  [1m[36mAdminUser Load (0.2ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = ? ORDER BY lft ASC LIMIT 1  [["id", "2"]]
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  UPDATE "categories" SET "updated_at" = '2013-02-28 12:46:30.027752', "name" = 'Child #1' WHERE "categories"."id" = 2
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", 2]]
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 2 AND "categories"."rgt" >= 3) AND ("categories".id != 2)
+  [1m[36mSQL (0.2ms)[0m  [1mUPDATE "categories" SET "depth" = 1 WHERE "categories"."id" IN (SELECT "categories"."id" FROM "categories" WHERE "categories"."id" = 2 ORDER BY "categories"."lft")[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 2 AND "categories"."rgt" >= 3) AND ("categories".id != 2)
+  [1m[36m (3.2ms)[0m  [1mcommit transaction[0m
+Redirected to http://dev.ecm:3000/admin/categories/2
+Completed 302 Found in 68ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/admin/categories/2" for 192.168.0.36 at Thu Feb 28 13:46:30 +0100 2013
+Processing by Admin::CategoriesController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[35mAdminUser Load (0.2ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? ORDER BY lft ASC LIMIT 1[0m  [["id", "2"]]
+  [1m[35mCategory Load (0.2ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = 1 ORDER BY lft ASC LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "active_admin_comments" WHERE "active_admin_comments"."namespace" = 'admin' AND "active_admin_comments"."resource_id" = '2' AND "active_admin_comments"."resource_type" = 'Category'[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(*) FROM "active_admin_comments" WHERE "active_admin_comments"."namespace" = 'admin' AND "active_admin_comments"."resource_id" = '2' AND "active_admin_comments"."resource_type" = 'Category'
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/show.html.arb (31.3ms)
+Completed 200 OK in 36ms (Views: 32.5ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:30 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:30 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:46:30 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:46:31 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[36mAdminUser Load (0.3ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count 
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "categories" [0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count 
+  [1m[36mCategory Load (0.8ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" < 1) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" < 2) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" > 1) ORDER BY "categories"."lft" LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" > 2) ORDER BY "categories"."lft" LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY lft ASC
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (136.4ms)
+Completed 200 OK in 141ms (Views: 136.8ms | ActiveRecord: 1.8ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:31 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:31 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:46:31 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Thu Feb 28 13:46:32 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:46:32 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories/new" for 192.168.0.36 at Thu Feb 28 13:46:32 +0100 2013
+Processing by Admin::CategoriesController#new as HTML
+  [1m[36mAdminUser Load (0.3ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35mCategory Load (0.2ms)[0m  SELECT "categories".* FROM "categories" ORDER BY lft ASC
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/new.html.arb (27.3ms)
+Completed 200 OK in 99ms (Views: 95.7ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:32 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:32 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:46:32 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started POST "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:46:36 +0100 2013
+Processing by Admin::CategoriesController#create as HTML
+  Parameters: {"commit"=>"Create Category", "category"=>{"name"=>"Child #2", "parent_id"=>"1"}, "authenticity_token"=>"jp8ejxDVqIm2mXarA4xfGeaj2qW34/LMpyy72iYUeKk=", "utf8"=>"✓"}
+  [1m[36mAdminUser Load (0.2ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mCategory Load (0.2ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY "categories"."rgt" desc LIMIT 1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "categories" ("created_at", "depth", "lft", "name", "parent_id", "rgt", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)  [["created_at", Thu, 28 Feb 2013 12:46:36 UTC +00:00], ["depth", nil], ["lft", 5], ["name", "Child #2"], ["parent_id", 1], ["rgt", 6], ["updated_at", Thu, 28 Feb 2013 12:46:36 UTC +00:00]]
+  [1m[36mCategory Load (0.2ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? ORDER BY "categories"."lft" LIMIT 1[0m  [["id", 1]]
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories"."lft", "categories"."rgt", "categories"."parent_id" FROM "categories" WHERE "categories"."id" = ? LIMIT 1  [["id", 3]]
+  [1m[36mSQL (0.3ms)[0m  [1mUPDATE "categories" SET "lft" = CASE WHEN "lft" BETWEEN 4 AND 4 THEN "lft" + 6 - 4 WHEN "lft" BETWEEN 5 AND 6 THEN "lft" + 4 - 5 ELSE "lft" END, "rgt" = CASE WHEN "rgt" BETWEEN 4 AND 4 THEN "rgt" + 6 - 4 WHEN "rgt" BETWEEN 5 AND 6 THEN "rgt" + 4 - 5 ELSE "rgt" END, "parent_id" = CASE WHEN id = 3 THEN 1 ELSE "parent_id" END WHERE "categories"."id" IN (SELECT "categories"."id" FROM "categories" WHERE (not ("lft" = CASE WHEN "lft" BETWEEN 4 AND 4 THEN "lft" + 6 - 4 WHEN "lft" BETWEEN 5 AND 6 THEN "lft" + 4 - 5 ELSE "lft" END AND "rgt" = CASE WHEN "rgt" BETWEEN 4 AND 4 THEN "rgt" + 6 - 4 WHEN "rgt" BETWEEN 5 AND 6 THEN "rgt" + 4 - 5 ELSE "rgt" END AND "parent_id" = CASE WHEN id = 3 THEN 1 ELSE "parent_id" END)) ORDER BY "categories"."lft")[0m
+  [1m[35mCategory Load (0.0ms)[0m  SELECT "categories"."lft", "categories"."rgt", "categories"."parent_id" FROM "categories" WHERE "categories"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mCategory Load (0.0ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", 3]]
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 4 AND "categories"."rgt" >= 5) AND ("categories".id != 3)
+  [1m[36mSQL (0.9ms)[0m  [1mUPDATE "categories" SET "depth" = 1 WHERE "categories"."id" IN (SELECT "categories"."id" FROM "categories" WHERE "categories"."id" = 3 ORDER BY "categories"."lft")[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 4 AND "categories"."rgt" >= 5) AND ("categories".id != 3)
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE ("categories"."lft" >= 4 AND "categories"."lft" < 5) AND ("categories".id != 3) ORDER BY "categories"."lft"[0m
+  [1m[35mCategory Load (0.0ms)[0m  SELECT "categories"."lft", "categories"."rgt", "categories"."parent_id" FROM "categories" WHERE "categories"."id" = ? LIMIT 1  [["id", 3]]
+  [1m[36mCategory Load (0.0ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? LIMIT 1[0m  [["id", 3]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 4 AND "categories"."rgt" >= 5) AND ("categories".id != 3)
+  [1m[36mSQL (0.1ms)[0m  [1mUPDATE "categories" SET "depth" = 1 WHERE "categories"."id" IN (SELECT "categories"."id" FROM "categories" WHERE "categories"."id" = 3 ORDER BY "categories"."lft")[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" WHERE ("categories"."lft" <= 4 AND "categories"."rgt" >= 5) AND ("categories".id != 3)
+  [1m[36m (7.4ms)[0m  [1mcommit transaction[0m
+Redirected to http://dev.ecm:3000/admin/categories/3
+Completed 302 Found in 36ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/admin/categories/3" for 192.168.0.36 at Thu Feb 28 13:46:36 +0100 2013
+Processing by Admin::CategoriesController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mAdminUser Load (0.1ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."id" = ? ORDER BY lft ASC LIMIT 1[0m  [["id", "3"]]
+  [1m[35mCategory Load (0.9ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."id" = 1 ORDER BY lft ASC LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "active_admin_comments" WHERE "active_admin_comments"."namespace" = 'admin' AND "active_admin_comments"."resource_id" = '3' AND "active_admin_comments"."resource_type" = 'Category'[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(*) FROM "active_admin_comments" WHERE "active_admin_comments"."namespace" = 'admin' AND "active_admin_comments"."resource_id" = '3' AND "active_admin_comments"."resource_type" = 'Category'
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/show.html.arb (82.1ms)
+Completed 200 OK in 86ms (Views: 82.7ms | ActiveRecord: 1.3ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:37 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:46:37 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:46:37 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:46:39 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[36mAdminUser Load (0.4ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count 
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "categories" [0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count 
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" < 1) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" < 2) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" < 4) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (8457.5ms)
+Completed 500 Internal Server Error in 8464ms
+
+ActionView::Template::Error (undefined method `move_up_admin_category_path' for #<ActiveAdmin::Views::IndexAsTable:0xb650c344>):
+    1: insert_tag renderer_for(:index)
+  app/admin/categories.rb:14
+
+
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.5ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.6ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (5.5ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:46:47 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.2ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" < 1) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" < 2) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" < 4) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (6052.2ms)
+Completed 500 Internal Server Error in 6056ms
+
+ActionView::Template::Error (undefined method `move_up_admin_category_path' for #<ActiveAdmin::Views::IndexAsTable:0xb646272c>):
+    1: insert_tag renderer_for(:index)
+  app/admin/categories.rb:14
+
+
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.2ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.6ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (5.1ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Thu Feb 28 13:47:50 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[36mAdminUser Load (0.1ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count 
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "categories" [0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count 
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0[0m
+  [1m[35mCategory Load (0.2ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" < 1) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" < 2) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" < 4) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" > 1) ORDER BY "categories"."lft" LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" > 2) ORDER BY "categories"."lft" LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" > 4) ORDER BY "categories"."lft" LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY lft ASC
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (91.9ms)
+Completed 200 OK in 110ms (Views: 93.2ms | ActiveRecord: 1.3ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Thu Feb 28 13:47:50 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Thu Feb 28 13:47:50 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Thu Feb 28 13:47:50 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Thu Feb 28 13:47:50 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Thu Feb 28 13:47:50 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (0ms)
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+
+
+Started GET "/admin" for 192.168.0.36 at Fri Mar 01 14:29:01 +0100 2013
+Processing by Admin::DashboardController#index as HTML
+  [1m[36mAdminUser Load (0.2ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/page/index.html.arb (40.9ms)
+Completed 200 OK in 64ms (Views: 47.7ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Fri Mar 01 14:29:02 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (52ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Fri Mar 01 14:29:02 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (2ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Fri Mar 01 14:29:02 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (21ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Fri Mar 01 14:29:03 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.1ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.6ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" < 1) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" < 2) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" < 4) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" > 1) ORDER BY "categories"."lft" LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" > 2) ORDER BY "categories"."lft" LIMIT 1[0m
+  [1m[35mCategory Load (0.2ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" > 4) ORDER BY "categories"."lft" LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY lft ASC[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (212.0ms)
+Completed 200 OK in 219ms (Views: 212.1ms | ActiveRecord: 1.9ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Fri Mar 01 14:29:04 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Fri Mar 01 14:29:04 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Fri Mar 01 14:29:04 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Fri Mar 01 14:29:04 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (1ms)
+
+
+Started GET "/assets/active_admin/orderable.png" for 192.168.0.36 at Fri Mar 01 14:29:04 +0100 2013
+Served asset /active_admin/orderable.png - 304 Not Modified (1ms)
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Fri Mar 01 14:42:52 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[35mAdminUser Load (0.1ms)[0m  SELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "categories" 
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count [0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" < 1) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" < 2) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" < 4) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" > 1) ORDER BY "categories"."lft" LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" > 2) ORDER BY "categories"."lft" LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" > 4) ORDER BY "categories"."lft" LIMIT 1
+  [1m[36mCategory Load (0.2ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc[0m
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (6468.2ms)
+Completed 500 Internal Server Error in 6531ms
+
+ActionView::Template::Error (undefined method `sortable_tree_indented_column' for #<ActiveAdmin::Views::IndexAsTable:0xb6b4a904>):
+    1: insert_tag renderer_for(:index)
+  app/admin/categories.rb:20
+
+
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.1ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.6ms)
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/actionpack-3.2.12/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (5.1ms)
+Connecting to database specified by database.yml
+
+
+Started GET "/admin/categories" for 192.168.0.36 at Fri Mar 01 14:43:21 +0100 2013
+Processing by Admin::CategoriesController#index as HTML
+  [1m[36mAdminUser Load (0.1ms)[0m  [1mSELECT "admin_users".* FROM "admin_users" WHERE "admin_users"."id" = 1 LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count 
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "categories" [0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(count_column) FROM (SELECT 1 AS count_column FROM "categories" LIMIT 30 OFFSET 0) subquery_for_count 
+  [1m[36mCategory Load (0.2ms)[0m  [1mSELECT "categories".* FROM "categories" ORDER BY "categories"."lft" asc LIMIT 30 OFFSET 0[0m
+  [1m[35mCategory Load (0.2ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" < 1) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" < 2) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" < 4) ORDER BY "categories"."lft" DESC, "categories"."lft" ASC LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" IS NULL AND ("categories".id != 1) AND ("categories"."lft" > 1) ORDER BY "categories"."lft" LIMIT 1[0m
+  [1m[35mCategory Load (0.1ms)[0m  SELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 2) AND ("categories"."lft" > 2) ORDER BY "categories"."lft" LIMIT 1
+  [1m[36mCategory Load (0.1ms)[0m  [1mSELECT "categories".* FROM "categories" WHERE "categories"."parent_id" = 1 AND ("categories".id != 3) AND ("categories"."lft" > 4) ORDER BY "categories"."lft" LIMIT 1[0m
+  [1m[35mCategory Load (0.2ms)[0m  SELECT "categories".* FROM "categories" ORDER BY lft ASC
+  Rendered /home/robo/.rvm/gems/ruby-1.8.7-p330@active_admin-awesome_nested_set/gems/activeadmin-0.5.1/app/views/active_admin/resource/index.html.arb (245.8ms)
+Completed 200 OK in 273ms (Views: 251.6ms | ActiveRecord: 1.7ms)
+
+
+Started GET "/assets/active_admin.js" for 192.168.0.36 at Fri Mar 01 14:43:21 +0100 2013
+Served asset /active_admin.js - 304 Not Modified (66ms)
+
+
+Started GET "/assets/active_admin.css?body=1" for 192.168.0.36 at Fri Mar 01 14:43:21 +0100 2013
+Served asset /active_admin.css - 304 Not Modified (13ms)
+
+
+Started GET "/assets/active_admin/print.css?body=1" for 192.168.0.36 at Fri Mar 01 14:43:21 +0100 2013
+Served asset /active_admin/print.css - 304 Not Modified (2ms)
+
+
+Started GET "/assets/active_admin/datepicker/datepicker-input-icon.png" for 192.168.0.36 at Fri Mar 01 14:43:21 +0100 2013
+Served asset /active_admin/datepicker/datepicker-input-icon.png - 304 Not Modified (1ms)
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml

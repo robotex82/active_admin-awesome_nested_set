@@ -1,4 +1,4 @@
-source "http://rubygems.org"
+source "https://rubygems.org"
 
 # Declare your gem's dependencies in active_admin-acts_as_list.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
@@ -15,3 +15,6 @@ gem "jquery-rails"
 
 # To use debugger
 # gem 'debugger'
+
+# Patched guard rails
+gem 'guard-rails',  :git => 'git://github.com/robotex82/guard-rails.git', :branch => 'better-engine-support'
