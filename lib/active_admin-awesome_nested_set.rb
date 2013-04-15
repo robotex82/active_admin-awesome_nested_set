@@ -10,3 +10,4 @@ end
 
 ActiveAdmin::ResourceDSL.send :include, ActiveAdmin::AwesomeNestedSet::Helper
 ActiveAdmin::Views::IndexAsTable.send :include, ActiveAdmin::AwesomeNestedSet::Helper
+ActiveAdmin::Views::Pages::Show.send :include, ActiveAdmin::AwesomeNestedSet::Helper
