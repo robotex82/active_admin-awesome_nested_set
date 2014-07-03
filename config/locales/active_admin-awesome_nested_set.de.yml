@@ -1,9 +1,9 @@
 de:
   awesome_nested_set:
-    moved_to_top: "%{resource} an die erste Position verschoben"    
+    moved_to_top: "%{resource} an die erste Position verschoben"
     moved_up: "%{resource} nach oben verschoben"
     moved_down: "%{resource} nach unten verschoben"
-    moved_to_bottom: "%{resource} an die letzte Position verschoben"    
+    moved_to_bottom: "%{resource} an die letzte Position verschoben"
     illegal_move_to_top: "Konnte %{resource} nicht n die erste Position verschieben"
     illegal_move_up: "Konnte %{resource} nicht nach oben verschieben"
     illegal_move_down: "Konnte %{resource} nicht nach unten verschieben"
