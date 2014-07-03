@@ -1,0 +1,10 @@
+en:
+  awesome_nested_set:
+    moved_to_top: "%{resource} shifted to the first position"
+    moved_up: "%{resource} shifted upward"
+    moved_down: "%{resource} shifted downward"
+    moved_to_bottom: "%{resource} moved to the last position"
+    illegal_move_to_top: "%{resource} could not be moved to the first position"
+    illegal_move_up: "%{resource} could not be moved upward"
+    illegal_move_down: "%{resource} could not be moved downward"
+    illegal_move_to_bottom: "%{resource} could not be moved to the last position"
