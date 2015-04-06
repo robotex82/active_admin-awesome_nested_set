@@ -1,0 +1,10 @@
+ru:
+  awesome_nested_set:
+    moved_to_top: "%{resource} перемещен(a) на первую позицию"
+    moved_up: "%{resource} перемещен(a) вверх"
+    moved_down: "%{resource} перемещен(a) вниз"
+    moved_to_bottom: "%{resource} перемещен(a) на последнюю позицию"
+    illegal_move_to_top: "%{resource} переместить на первую позицию не удалось"
+    illegal_move_up: "%{resource} переместить вверх не удалось"
+    illegal_move_down: "%{resource} переместить вниз не удалось"
+    illegal_move_to_bottom: "%{resource} переместить на последнюю позицию не удалось"
