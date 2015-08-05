@@ -22,10 +22,10 @@ module ActiveAdmin
       def get_nested_set class_or_item
         result = []
 
-        roots = class_or_item.respond_to?(:scoped) ? class_or_item.roots : class_or_items
+        roots = class_or_item.respond_to?(:roots) ? class_or_item.roots : class_or_item
 
         items = roots.each do |root|
-          result += root.self_and_descendants.compact
+          result += root.self_and_descendants.to_a.compact
         end
 
         result
