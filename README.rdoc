@@ -1,5 +1,5 @@
 = ActiveAdminAwesomeNestedSet
-
+* Add support for rails versions`< 5.3`
 
 = Purpose
 
@@ -24,11 +24,11 @@ You need active_admin and awesome_nested_set.
 Add it to your gemfile:
 
   gem 'active_admin-awesome_nested_set'
-  
+
 Install your bundle:
 
   > bundle install
-  
+
 = Usage
 
 Assuming you have a Category model: 
@@ -37,7 +37,7 @@ Assuming you have a Category model:
     # awesome nested set
     acts_as_nested_set
     default_scope :order => 'lft ASC'
-    
+
     #...
   end
 
@@ -48,26 +48,26 @@ You can add sortable columns, member actions and sorting like this:
   ActiveAdmin.register Category do
     # Sort categories by left asc
     config.sort_order = 'lft_asc'
-    
+
     # Add member actions for positioning.
     sortable_tree_member_actions
-    
+
     index do
       # This adds columns for moving up, down, top and bottom.
       sortable_tree_columns
-      
+
       #...
       column :firstname
       column :lastname
       default_actions
     end
   end
-  
+
 = Todo
 
 * Tests, tests, tests.
 * Better docs.
-  
+
 = License
-  
-This project rocks and uses MIT-LICENSE.  
+
+This project rocks and uses MIT-LICENSE.
